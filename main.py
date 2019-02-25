@@ -6,7 +6,6 @@ from telebot import apihelper
 from sqlalchemy import create_engine, select
 from database import place
 
-# На всякий случай: '\n'.join(map(str, r))
 
 # токен бота
 bot = telebot.TeleBot(config.token)
@@ -34,7 +33,7 @@ def log(message, answer):
 @bot.message_handler(commands=['start'])
 def send_message(message):
     answer = "Здравствуйте я Бот-помощник \nВведите команду для получения информации о месте проведения собеседования "\
-             "\nНапример: /radius"
+             "\nНапример: /kfc"
     bot.send_message(message.chat.id, answer)
     log(message, answer)
 
@@ -44,48 +43,22 @@ def send_message(message):
 def handle_help(message):
     answer = "Список команд:" \
              "\n/start - приветствие" \
-             "\n/radius - информация о компании ООО Радиус" \
-             "\n/kb - информация о кампании Красное и Белое" \
+             "\n/kfc - информация о компании KFC" \
              "\n/remind - настройка ежедневного напоминания. \nПример: /remind число(01.01.2019) время(13:00) время в "\
              "\nкоторое будет приходить ежедневное напоминание(10:00) "
     bot.send_message(message.chat.id, answer)
     log(message, answer)
 
 
-# Команда на вывод информации о компании Радиус
-# noinspection PyStringFormat
-@bot.message_handler(commands=['radius'])
+# Команда на вывод информации о компании KFC
+@bot.message_handler(commands=['kfc'])
 def find_info(message):
     raw = message.text
-    if raw != str('/radius'):
+    if raw != str('/kfc'):
         bot.send_message(message.chat.id, "Упс, похоже вы ошиблись")
-    elif raw == str('/radius'):
+    elif raw == str('/kfc'):
         select_stmt = select([place.name, place.phone, place.address, place.map, place.panorama]). \
-            where(place.id == '1')
-        result = engine.execute(select_stmt)
-        for r in result:
-            bot.send_message(message.chat.id, "Название организации: {}"
-                                              "\nКонтактный номер телефона: {} "
-                                              "\nТочный адрес: {} "
-                                              "\nСсылка на навигатор: {} "
-                                              "\nСсылка на панораму(работает только на ПК): {}".format(r.name,
-                                                                                                       r.phone,
-                                                                                                       r.address,
-                                                                                                       r.map,
-                                                                                                       r.panorama))
-            log(message, r)
-
-
-# Команда на вывод информации о компании Красное и Белое
-# noinspection PyStringFormat
-@bot.message_handler(['kb'])
-def find_info(message):
-    raw = message.text
-    if raw != str('/kb'):
-        bot.send_message(message.chat.id, "Упс, похоже вы ошиблись")
-    elif raw == str('/kb'):
-        select_stmt = select([place.name, place.phone, place.address, place.map, place.panorama]). \
-            where(place.id == '2')
+            where(place.id == '1') #КФС должен иметь id = 1, в вашей базе данных
         result = engine.execute(select_stmt)
         for r in result:
             bot.send_message(message.chat.id, "Название организации: {}"
@@ -125,6 +98,9 @@ def remind(message):
         while True:
             schedule.run_pending()
             time.sleep(1)
+
+
+#не смог придумать как отменить напоминалку по запросу
 
 
 bot.polling(none_stop=True, interval=0)
