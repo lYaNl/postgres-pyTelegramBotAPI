@@ -14,7 +14,7 @@ bot = telebot.TeleBot(config.token)
 apihelper.proxy = {"https": "socks5://132.145.36.9:1080"}
 
 # Присоединение к базе данных
-engine = create_engine('postgresql://127.0.0.1:5432/mydb', echo=True)
+engine = create_engine('postgresql://127.0.0.1:5432/mydb', echo=True) #mydb - название моей базы данных
 
 
 # Простой лог чтобы видеть что происходит в боте при взаимодействии с пользователем, в самом терминале
