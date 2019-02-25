@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Boolean, Date
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker
 
 engine = create_engine('postgresql://127.0.0.1:5432/mydb', echo=True)
 Session = sessionmaker(bind=engine)
@@ -30,9 +30,6 @@ Base.metadata.create_all(bind=engine)
 
 session = Session()
 """
-Radius3 = place('4', 'Radius3', '84951234565', 'Научный проезд 15', 'https://goo-gl.ru/4Sxt', 'https://goo-gl.ru/4Sxw')
-
-session.add(Radius3)
-session.commit()
+Place your information here
 """
 session.close()
