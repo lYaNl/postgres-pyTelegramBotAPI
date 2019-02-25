@@ -50,15 +50,15 @@ def handle_help(message):
     log(message, answer)
 
 
-# Команда на вывод информации о компании KFC
-@bot.message_handler(commands=['kfc'])
+# Команда на вывод информации о компании KFC, можно добавить сколько угодно команд идентичные этой,для других компаний. Стоит только поменять места где стоит "#!"
+@bot.message_handler(commands=['kfc']) #!
 def find_info(message):
     raw = message.text
-    if raw != str('/kfc'):
+    if raw != str('/kfc'): #!
         bot.send_message(message.chat.id, "Упс, похоже вы ошиблись")
-    elif raw == str('/kfc'):
+    elif raw == str('/kfc'): #!
         select_stmt = select([place.name, place.phone, place.address, place.map, place.panorama]). \
-            where(place.id == '1') #КФС должен иметь id = 1, в вашей базе данных
+            where(place.id == '1') #КФС должен иметь id = 1, в вашей базе данных #!!!
         result = engine.execute(select_stmt)
         for r in result:
             bot.send_message(message.chat.id, "Название организации: {}"
